@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo List</title>
+    <link rel="stylesheet" href="./main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+</head>
+
+<body>
+    <div class="header">
+        <h1>ToDo List</h1>
+        <img src="./image/calendar.png" alt="calendar">
+    </div>
+    <div class="panel">
+        <div class="input-panel">
+            <input type="text" id="task-name-input">
+            <input type="text" id="task-date-input" placeholder="DATE" class="date-input">
+        </div>
+        <button id="task-btn-add">ADD</button>
+
+    </div>
+    <div class="task-list">
+        <p id="start-message">No new tasks</p>
+    </div>
+
+
+
+    <script src="./main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,213 @@
+ @font-face {
+     font-family: Jost;
+     src: url(./Jost/static/Jost-SemiBold.ttf);
+     font-weight: 600;
+     font-display: swap;
+ }
+
+ @font-face {
+     font-family: Jost;
+     src: url(./Jost/static/Jost-Regular.ttf);
+     font-weight: 400;
+     font-display: swap;
+ }
+
+
+ * {
+     padding: 0;
+     margin: 0;
+ }
+
+ body {
+     margin-top: 15px;
+     color: rgba(147, 149, 211, 1);
+     font-family: Jost;
+     font-weight: 600;
+ }
+
+ .header {
+     width: 70%;
+     margin: auto;
+     display: flex;
+     flex-direction: row;
+     justify-content: space-between;
+     align-items: center;
+     padding: 10px;
+     background-color: rgba(147, 149, 211, 1);
+     border-radius: 10px;
+     color: white;
+ }
+
+ .header img {
+     width: 60px;
+     height: 60px;
+ }
+
+ .task-list {
+     width: 70%;
+     margin: auto;
+ }
+
+ #start-message {
+     margin: 10px;
+ }
+
+ .task {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+     background-color: rgba(240, 240, 240, 1);
+     border: 3px solid rgba(147, 149, 211, 1);
+     border-radius: 5px;
+     padding: 8px 12px;
+     margin: 10px 0 10px 0;
+ }
+
+ .task p {
+     margin-left: 4px;
+ }
+
+ .completed {
+     background-color: rgba(147, 149, 211, 1);
+     color: white;
+ }
+
+ .completed p {
+     text-decoration: line-through;
+ }
+
+ .input-panel {
+     width: 85%;
+     padding: 5px;
+     display: flex;
+     flex-direction: row;
+     align-items: center;
+     justify-content: space-between;
+     border: 3px solid rgb(141, 142, 185);
+     border-radius: 5px;
+ }
+
+ #task-date-input {
+     width: 10%;
+     background-color: rgba(147, 149, 211, 1);
+     color: white;
+     border: 2px solid rgb(141, 142, 185);
+     border-radius: 4px;
+     text-align: center;
+     cursor: pointer;
+ }
+
+ ::placeholder {
+     color: white;
+     font-family: Jost;
+     font-weight: 600;
+
+ }
+
+ #task-btn-add {
+     padding: 4px;
+     width: 10%;
+     height: 65px;
+     background-color: rgba(147, 149, 211, 1);
+     border: 3px solid rgba(147, 149, 211, 1);
+     border-radius: 3px;
+     color: white;
+     font-family: Jost;
+     font-weight: 600;
+ }
+
+ .panel {
+     width: 70%;
+     margin: auto;
+     margin-top: 25px;
+     display: flex;
+     flex-direction: row;
+     align-items: center;
+     justify-content: space-around;
+ }
+
+ .input-panel input {
+     height: 50px;
+     padding-left: 4px;
+     border: none;
+     outline: none;
+     color: rgb(111, 113, 201);
+     font-family: Jost;
+     font-weight: 600;
+ }
+
+
+ .panelBtn {
+     display: flex;
+     flex-direction: row;
+ }
+
+ .remove {
+     margin: 0 10px 0 10px;
+     width: 24px;
+     height: 24px;
+     background-image: url(./image/Trash.png);
+     background-size: contain;
+     background-repeat: no-repeat;
+     background-position: center;
+     border: 2px solid rgb(141, 142, 185);
+     border-radius: 4px;
+     cursor: pointer;
+ }
+
+ .edit,
+ .editing {
+     margin: 0 10px 0 10px;
+     width: 24px;
+     height: 24px;
+     background-image: url(./image/Pencil.png);
+     background-size: contain;
+     background-repeat: no-repeat;
+     background-position: center;
+     border: 2px solid rgb(141, 142, 185);
+     border-radius: 4px;
+     cursor: pointer;
+ }
+
+ .ok {
+     margin: 0 10px 0 10px;
+     width: 24px;
+     height: 24px;
+     background-color: rgba(240, 240, 240, 1);
+     font-size: 14px;
+     color: rgb(141, 142, 185);
+     border: 2px solid rgb(141, 142, 185);
+     border-radius: 4px;
+ }
+
+ .check {
+     appearance: none;
+     width: 24px;
+     width: 24px;
+     background-image: url(./image/CheckCircle.png);
+     background-size: contain;
+     background-repeat: no-repeat;
+     background-position: center;
+     border: 2px solid rgb(141, 142, 185);
+     border-radius: 4px;
+     cursor: pointer;
+ }
+
+ .edit-input,
+ .edit-date {
+     padding-left: 3px;
+     border: 3px solid rgb(141, 142, 185);
+     border-radius: 5px;
+     outline: none;
+     color: rgb(111, 113, 201);
+     font-family: Jost;
+     font-weight: 400;
+ }
+
+ .deadline {
+     margin-right: 10px;
+     padding: 0 10px 0 10px;
+     background-color: rgba(147, 149, 211, 1);
+     border-radius: 3px;
+     color: white;
+ }
