@@ -148,15 +148,21 @@ function createTask(task) {
     div.className = "task";
     div.dataset.id = task.id;
 
+    const paragraphDiv = document.createElement("div");
+    paragraphDiv.classList.add("taskParagraph");
+
     const p = document.createElement("p");
     p.textContent = task.text;
+
+    const panel = document.createElement("div");
+    panel.className = "panelBtn";
 
     const date = document.createElement("span");
     date.className = "deadline";
     date.textContent = task.date || "";
 
-    const panel = document.createElement("div");
-    panel.className = "panelBtn";
+    const panelBtn = document.createElement("div");
+    panelBtn.classList.add("buttons");
 
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
@@ -169,8 +175,10 @@ function createTask(task) {
     const deleteBtn = document.createElement("button");
     deleteBtn.className = "remove";
 
-    panel.append(date, editBtn, checkbox, deleteBtn);
-    div.append(p, panel);
+    paragraphDiv.append(p);
+    panelBtn.append(editBtn, checkbox, deleteBtn)
+    panel.append(date, panelBtn);
+    div.append(paragraphDiv, panel);
 
     return { div, checkbox, editBtn, deleteBtn };
 }
