@@ -236,8 +236,8 @@ function editTaskText(taskId) {
     const checkbox = taskDiv.querySelector(".check");
     const editBtn = taskDiv.querySelector(".edit");
 
-    const textInput = document.createElement("input");
-    textInput.type = "text";
+    const textInput = document.createElement("textarea");
+    textInput.name = "text";
     textInput.value = task.text;
     textInput.classList.add("edit-input");
 

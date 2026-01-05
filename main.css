@@ -229,8 +229,17 @@
      background-position: center;
  }
 
- .edit-input,
- .edit-date {
+
+
+ .edit-input {
+     resize: none;
+     overflow: hidden;
+     field-sizing: content;
+     font-size: 16px;
+ }
+
+ .edit-date,
+ .edit-input {
      padding-left: 3px;
      border: 3px solid rgb(141, 142, 185);
      border-radius: 5px;
@@ -306,4 +315,9 @@
      #task-btn-add {
          width: 15%;
      }
+
+     .show-button-panel-active button {
+         width: 40%;
+     }
+
  }
