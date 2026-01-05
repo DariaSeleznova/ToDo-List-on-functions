@@ -14,9 +14,11 @@
 
 
  * {
-     padding: 0;
      margin: 0;
+     padding: 0;
+     box-sizing: border-box;
  }
+
 
  body {
      margin-top: 15px;
@@ -87,6 +89,31 @@
      border-radius: 5px;
  }
 
+ .show-button-panel-hidden {
+     display: none;
+ }
+
+ .show-button-panel-active {
+     display: flex;
+     flex-direction: row;
+     margin: 20px auto 20px auto;
+     align-items: center;
+     width: 85%;
+     justify-content: space-around;
+
+ }
+
+ .show-button-panel-active button {
+     width: 25%;
+     border: 3px solid rgba(147, 149, 211, 1);
+     border-radius: 5px;
+     color: rgb(147, 149, 211, 1);
+     background-color: white;
+     padding: 10px;
+     font-family: Jost;
+     font-weight: 400;
+ }
+
  #task-date-input {
      width: 10%;
      background-color: rgba(147, 149, 211, 1);
@@ -142,55 +169,46 @@
      flex-direction: row;
  }
 
- .remove {
-     margin: 0 10px 0 10px;
+ .remove,
+ .edit,
+ .editing,
+ .ok,
+ .check {
+     margin: 0 10px;
      width: 24px;
      height: 24px;
-     background-image: url(./image/Trash.png);
-     background-size: contain;
-     background-repeat: no-repeat;
-     background-position: center;
-     border: 2px solid rgb(141, 142, 185);
      border-radius: 4px;
+     border: 2px solid rgb(141, 142, 185);
      cursor: pointer;
+ }
+
+ .remove {
+     background: url(./image/Trash.png) center / contain no-repeat;
  }
 
  .edit,
  .editing {
-     margin: 0 10px 0 10px;
-     width: 24px;
-     height: 24px;
-     background-image: url(./image/Pencil.png);
-     background-size: contain;
-     background-repeat: no-repeat;
-     background-position: center;
-     border: 2px solid rgb(141, 142, 185);
-     border-radius: 4px;
-     cursor: pointer;
- }
-
- .ok {
-     margin: 0 10px 0 10px;
-     width: 24px;
-     height: 24px;
-     background-color: rgba(240, 240, 240, 1);
-     font-size: 14px;
-     color: rgb(141, 142, 185);
-     border: 2px solid rgb(141, 142, 185);
-     border-radius: 4px;
+     background: url(./image/Pencil.png) center / contain no-repeat;
  }
 
  .check {
      appearance: none;
-     width: 24px;
-     width: 24px;
+     background: url(./image/CheckCircle.png) center / contain no-repeat;
+ }
+
+ .ok {
+     background-color: rgba(240, 240, 240, 1);
+     font-size: 14px;
+     color: rgb(141, 142, 185);
+ }
+
+
+ .check {
+     appearance: none;
      background-image: url(./image/CheckCircle.png);
      background-size: contain;
      background-repeat: no-repeat;
      background-position: center;
-     border: 2px solid rgb(141, 142, 185);
-     border-radius: 4px;
-     cursor: pointer;
  }
 
  .edit-input,
