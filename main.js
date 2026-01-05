@@ -1,14 +1,50 @@
+//======================
+//DOM INTERFACE ELEMENTS
+//======================
+
+//task name input field
+
 let taskNameInput = document.querySelector("#task-name-input");
+
+//add task button
+
 let addTaskButton = document.querySelector("#task-btn-add");
+
+//message 'No new task'
+
 let startMessage = document.querySelector("#start-message");
+
+//task list container
+
 let taskList = document.querySelector(".task-list");
-// CALENDAR
+
+//filter button bar
+
+let btnPanel = document.querySelector(".show-button-panel-hidden");
+
+//filter buttons
+
+let showAllBtn = document.querySelector("#showAllButton").addEventListener("click", showAllHandler);
+let showCompleted = document.querySelector("#showNotCompleted").addEventListener("click", showNotCompletedHandler);
+
+//main task storage (STATE APP)
+
+let tasks = [];
+//====================
+// CALENDAR(Flatpickr)
+//====================
+
+//calendar initialization
+
 const datePicker = flatpickr("#task-date-input", {
     clickOpens: false,
     dateFormat: "d-m-Y",
     minDate: "today",
     locale: { firstDayOfWeek: 1 }
 });
+
+//close/open the calendar on click
+
 const input = document.querySelector("#task-date-input");
 
 input.addEventListener("click", (e) => {
@@ -16,78 +52,152 @@ input.addEventListener("click", (e) => {
     datePicker.isOpen ? datePicker.close() : datePicker.open();
 });
 
+//closing the calendar when clicking outside the field 
+
 document.addEventListener("click", () => datePicker.close());
 
+//==================
+//TASK INPUT PANEL
+//==================
+
+//adding tasks on button
+
 addTaskButton.addEventListener("click", addTaskHandler);
+
+//adding tasks on 'Enter' button
 
 taskNameInput.addEventListener("keydown", function (e) {
     if (e.code === "Enter" || e.code === "NumpadEnter") addTaskHandler();
 })
 
+//=========================
+//PARSING FROM LOCALSTORAGE
+//=========================
 
-function createTask(text, deadline) {
-    let div = document.createElement("div");
-    div.classList.add("task");
+//After the page loads, we restore the tasks
+document.addEventListener("DOMContentLoaded", () => {
+    loadTasks();
+});
 
-    let p = document.createElement("p");
-    p.innerText = text;
+// Getting tasks from localStorage
 
-    let dateP = document.createElement("span");
-    dateP.classList.add("deadline");
-    dateP.innerText = deadline ? `${deadline}` : "";
+function loadTasks() {
+    const savedTasks = localStorage.getItem("tasks");
+    if (!savedTasks) return;
+    tasks = JSON.parse(savedTasks);
+    renderTasks(tasks);
 
-    let panelDiv = document.createElement("div");
-    panelDiv.classList.add("panelBtn");
-
-    let input = document.createElement("input");
-    input.type = "checkbox";
-    input.classList.add("check");
-    input.addEventListener("change", changeTaskState);
-
-    let btnDelete = document.createElement("button");
-    btnDelete.classList.add("remove");
-    btnDelete.addEventListener("click", removeTask);
-
-    let btnEdit = document.createElement("button");
-    btnEdit.classList.add("edit");
-    btnEdit.addEventListener("click", editTaskText);
-
-    panelDiv.append(dateP);
-    panelDiv.append(btnEdit);
-    panelDiv.append(input);
-    panelDiv.append(btnDelete);
-
-    div.append(p);
-    div.append(panelDiv);
-
-
-    return div;
-}
-
-function changeTaskState() {
-    let taskDiv = this.closest(".task");
-    let editBtn = taskDiv.querySelector(".edit");
-
-    if (this.checked) {
-        taskDiv.classList.add("completed");
-        if (editBtn) editBtn.style.display = "none";
-
-    } else {
-        taskDiv.classList.remove("completed");
-        if (editBtn) editBtn.style.display = "inline-block";
+    // Show the filter panel if there are tasks
+    if (tasks.length > 0) {
+        btnPanel.classList.remove("show-button-panel-hidden");
+        btnPanel.classList.add("show-button-panel-active");
     }
 }
+//=====================
+//DRAWING TASKS (RENDER)
+//=====================
+
+// the main function that manages the DOM
+
+function renderTasks(list) {
+    taskList.innerHTML = "";
+
+    if (list.length === 0) {
+        startMessage.hidden = false;
+        return;
+    }
+    startMessage.hidden = true;
+
+    // create a task DOM element
+    list.forEach(task => {
+        const { div, checkbox, editBtn, deleteBtn } = createTask(task);
+        // if the task is completed, we apply styles
+        if (task.completed) {
+            div.classList.add("completed");
+            editBtn.style.display = "none";
+        }
+
+        // checkbox - change status
+        checkbox.addEventListener("change", () => {
+            toggleTaskCompleted(task.id);
+            renderTasks(tasks);
+        });
+
+        // editing
+        editBtn.addEventListener("click", () => {
+            editTaskText(task.id);
+        });
+
+        // delete
+        deleteBtn.addEventListener("click", () => {
+            removeTask(task.id);
+        });
+
+        taskList.append(div);
+    });
+}
+
+//====================
+// CREATE ONE TASK
+//====================
+
+// this function is ONLY responsible for creating the DOM
+
+function createTask(task) {
+    const div = document.createElement("div");
+    div.className = "task";
+    div.dataset.id = task.id;
+
+    const p = document.createElement("p");
+    p.textContent = task.text;
+
+    const date = document.createElement("span");
+    date.className = "deadline";
+    date.textContent = task.date || "";
+
+    const panel = document.createElement("div");
+    panel.className = "panelBtn";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.className = "check";
+    checkbox.checked = task.completed;
+
+    const editBtn = document.createElement("button");
+    editBtn.className = "edit";
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.className = "remove";
+
+    panel.append(date, editBtn, checkbox, deleteBtn);
+    div.append(p, panel);
+
+    return { div, checkbox, editBtn, deleteBtn };
+}
+
+//==================
+// ADDING A TASK
+//==================
 
 function addTaskHandler() {
     let name = taskNameInput.value.trim();
-    let date = document.querySelector(".date-input").value;
+    let date = document.querySelector("#task-date-input").value;
 
     if (name) {
         if (!startMessage.hidden) startMessage.hidden = true;
+        let task = {
+            id: Date.now(),
+            text: name,
+            date: date,
+            completed: false
+        };
 
-        let newTask = createTask(name, date);
-        newTask.setAttribute('id', `${date}-${name}`);
-        taskList.append(newTask);
+        tasks.push(task);
+        renderTasks(tasks);
+        saveTasks();
+
+        btnPanel.classList.remove("show-button-panel-hidden");
+        btnPanel.classList.add("show-button-panel-active");
 
         taskNameInput.value = "";
         datePicker.clear();
@@ -97,49 +207,35 @@ function addTaskHandler() {
     }
 }
 
-function removeTask() {
-    this.closest(".task").remove();
+//==============
+//EDIT TASK
+//==============
 
-    let tasksLeft = document.querySelectorAll(".task");
-    if (tasksLeft.length === 0) {
-        startMessage.hidden = false;
-    }
-}
+function editTaskText(taskId) {
+    const task = tasks.find(t => t.id === taskId);
+    if (!task) return;
 
-function editTaskText() {
-    let taskDiv = this.closest(".task");
-    let p = taskDiv.querySelector("p");
-    let dateSpan = taskDiv.querySelector(".deadline");
+    const taskDiv = [...taskList.children].find(
+        div => div.dataset.id == taskId
+    );
+    if (!taskDiv) return;
 
-    if (this.dataset.mode === "editing") {
-        let textInput = taskDiv.querySelector("input.edit-input");
-        let dateInput = taskDiv.querySelector("input.edit-date");
+    if (taskDiv.dataset.mode === "editing") return;
+    taskDiv.dataset.mode = "editing";
 
-        p.innerText = textInput.value;
-        dateSpan.innerText = dateInput.value;
+    const p = taskDiv.querySelector("p");
+    const dateSpan = taskDiv.querySelector(".deadline");
+    const checkbox = taskDiv.querySelector(".check");
+    const editBtn = taskDiv.querySelector(".edit");
 
-        p.hidden = false;
-        dateSpan.hidden = false;
-
-
-        textInput.remove();
-        dateInput.remove();
-
-        this.classList.remove("ok");
-        this.classList.add("edit");
-        this.innerText = "";
-        this.dataset.mode = "";
-        return;
-    }
-
-    let textInput = document.createElement("input");
+    const textInput = document.createElement("input");
     textInput.type = "text";
-    textInput.value = p.innerText;
+    textInput.value = task.text;
     textInput.classList.add("edit-input");
 
-    let dateInput = document.createElement("input");
+    const dateInput = document.createElement("input");
     dateInput.type = "text";
-    dateInput.value = dateSpan.innerText;
+    dateInput.value = task.date;
     dateInput.classList.add("edit-date");
 
     flatpickr(dateInput, {
@@ -150,15 +246,76 @@ function editTaskText() {
 
     p.hidden = true;
     dateSpan.hidden = true;
+    checkbox.style.display = "none";
 
     p.after(textInput);
     dateSpan.after(dateInput);
 
-    this.classList.remove("edit");
-    this.classList.add("ok");
-    this.innerText = "ok";
-    this.dataset.mode = "editing";
+    editBtn.innerText = "OK";
+    editBtn.classList.remove("edit");
+    editBtn.classList.add("ok");
+
+    editBtn.onclick = () => {
+        task.text = textInput.value.trim();
+        task.date = dateInput.value;
+
+        taskDiv.dataset.mode = "";
+
+        renderTasks(tasks);
+        saveTasks();
+    };
 }
+
+//===============
+//DELETE TASK
+//===============
+
+function removeTask(taskId) {
+    tasks = tasks.filter(t => t.id !== taskId);
+    renderTasks(tasks);
+    saveTasks();
+    if (tasks.length === 0) {
+        startMessage.hidden = false;
+        btnPanel.classList.remove("show-button-panel-active");
+        btnPanel.classList.add("show-button-panel-hidden");
+    }
+}
+
+//=================
+//COMPLETION STATUS
+//=================
+
+function toggleTaskCompleted(taskId) {
+    let task = tasks.find(t => t.id == taskId);
+    if (!task) return;
+    task.completed = !task.completed;
+
+    saveTasks();
+}
+
+//==============
+//FILTERS
+//==============
+
+function showAllHandler() {
+    renderTasks(tasks);
+}
+
+function showNotCompletedHandler() {
+    const active = tasks.filter(task => !task.completed);
+    renderTasks(active);
+}
+
+//======================
+//SAVING TO LOCALSTORAGE
+//======================
+
+function saveTasks() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+
+
 
 
 
